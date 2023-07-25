@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 1440px;
+}
+
+h1,
+h2,
+p,
+ul {
+  margin: 0px;
+}
+
+button,
+ul {
+  padding: 0px;
+}
