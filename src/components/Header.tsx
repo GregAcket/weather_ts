@@ -3,8 +3,8 @@ import SwitchComponent from "./ThemeSwitch";
 
 const HeaderContainer = styled.header`
   display: flex;
-  flex-direction: row;
   justify-content: flex-end;
+  margin: 10px;
 `;
 
 export default function Header() {

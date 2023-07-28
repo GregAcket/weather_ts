@@ -2,6 +2,6 @@
 
 WORK IN PROGRESS
 
-Just a small weather app to try vite, TypeScript and Styled-component
+Just a small weather app to try Vite, TypeScript and Styled-component
 
-To make it work you will have to add a .env file with your own unsplash key.
+To make it work you will have to add a .env file with your own Unsplash_key. Check App.tsx file line 56
