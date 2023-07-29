@@ -7,7 +7,6 @@ const StyledGlobalStyle = createGlobalStyle<StyledProps>`
 
 * {
   box-sizing: border-box;
-  font-family: system-ui,-apple-system,"Segoe UI","Roboto","Helvetica Neue","Noto Sans","Liberation Sans","Arial","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji", sans-serif;
 }
 
 body {

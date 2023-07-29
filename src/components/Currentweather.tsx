@@ -10,6 +10,7 @@ type Currentweather = {
 
 const StyledArticle = styled.article`
   margin-left: 10px;
+  min-width: 20%;
 `;
 
 export default function Currentweather({

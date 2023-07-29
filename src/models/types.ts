@@ -21,6 +21,11 @@ export type StyledProps = {
   $isDarkMode: boolean;
 };
 
+export type StyledForecastProps = {
+  $isDarkMode: boolean;
+  $isActive: boolean;
+};
+
 export type Weather = {
   hourly: {
     temperature_2m: number[];

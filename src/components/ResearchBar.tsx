@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
 import { styled } from "styled-components";
 import { ResearchBarProps } from "../models/types";
 import { createApi } from "unsplash-js";
@@ -35,6 +35,7 @@ const StyledDivContainer = styled.div`
 
 const Styledbutton = styled.button`
   margin-bottom: 5px;
+  padding: 0px 3px;
   border: 1px solid black;
   border-radius: 5px;
   background: rgb(233, 233, 233, 0.6);
@@ -51,6 +52,8 @@ export default function ResearchBar({
   setPicture,
   setCoord,
 }: ResearchBarProps) {
+  const [name, setName] = useState("...");
+
   function isoToEmoji(code: string): string {
     return code
       .split("")
@@ -115,6 +118,7 @@ export default function ResearchBar({
         });
         setFoundCity([]);
         setCity("");
+        setName(name);
       })
 
       .catch(() => {
@@ -144,12 +148,11 @@ export default function ResearchBar({
   return (
     <>
       <StyledForm>
-        <label htmlFor="city">Quel temps fait il à ...</label>
+        <label htmlFor="city">Quel temps fait il à {name}</label>
         <StyledInput
           type="search"
           name="city"
           id="city"
-          placeholder="Paris"
           value={city}
           onChange={(e) => handleInputChange(e)}
         />
