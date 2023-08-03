@@ -1,7 +1,7 @@
-import { ChangeEvent, MouseEvent, useState } from "react";
-import { styled } from "styled-components";
-import { ResearchBarProps } from "../models/types";
-import { createApi } from "unsplash-js";
+import { ChangeEvent, MouseEvent, useState } from "react"
+import { styled } from "styled-components"
+import { ResearchBarProps } from "../models/types"
+import { createApi } from "unsplash-js"
 
 const StyledForm = styled.form`
   display: flex;
@@ -11,19 +11,21 @@ const StyledForm = styled.form`
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-`;
+`
 
 const StyledInput = styled.input`
-  margin-top: 5px;
+  margin-top: 10px;
   border-radius: 3px;
   border: 1px solid black;
-`;
+  height: 30px;
+  width: 250px;
+`
 
 const StyledDivContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 90px;
+  top: 100px;
   background: transparent;
   margin-top: 25px;
   max-width: 350px;
@@ -31,18 +33,21 @@ const StyledDivContainer = styled.div`
   @media (min-width: 768px) {
     max-width: 500px;
   }
-`;
+`
 
 const Styledbutton = styled.button`
   margin-bottom: 5px;
   padding: 0px 3px;
   border: 1px solid black;
   border-radius: 5px;
-  background: rgb(233, 233, 233, 0.6);
+  background: rgb(233, 233, 233, 0.7);
   &:hover {
     background: rgb(233, 233, 233, 1);
   }
-`;
+  &:focus {
+    background: rgb(233, 233, 233, 1);
+  }
+`
 
 export default function ResearchBar({
   city,
@@ -52,44 +57,44 @@ export default function ResearchBar({
   setPicture,
   setCoord,
 }: ResearchBarProps) {
-  const [name, setName] = useState("...");
+  const [name, setName] = useState("...")
 
   function isoToEmoji(code: string): string {
     return code
       .split("")
       .map((letter) => (letter.charCodeAt(0) % 32) + 0x1f1e5)
       .map((emojiCode) => String.fromCodePoint(emojiCode))
-      .join("");
+      .join("")
   }
 
   const api = createApi({
     accessKey: import.meta.env.VITE_UNSPLASH_KEY,
-  });
+  })
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCity(e.currentTarget.value);
+    setCity(e.currentTarget.value)
 
     fetch(
       "https://geocoding-api.open-meteo.com/v1/search?name=" +
         city +
-        "&count=5&language=fr&format=json"
+        "&count=40&language=fr&format=json"
     )
       .then((resolve) => {
         if (resolve.ok) {
-          return resolve.json();
+          return resolve.json()
         }
       })
 
       .then((data) => {
-        setFoundCity(data.results);
+        setFoundCity(data.results)
       })
 
       .catch((err) => {
-        alert(`Une  erreur s'est produite. Veuillez nous excuser`);
+        alert(`Une  erreur s'est produite. Veuillez nous excuser`)
 
-        console.log(err);
-      });
-  };
+        console.log(err)
+      })
+  }
 
   const handleSubmit = (
     e: MouseEvent,
@@ -97,7 +102,7 @@ export default function ResearchBar({
     lat: number,
     long: number
   ) => {
-    e.preventDefault();
+    e.preventDefault()
 
     api.search
       .getPhotos({
@@ -108,23 +113,23 @@ export default function ResearchBar({
 
       .then((image) => {
         if (image.response !== undefined) {
-          setPicture(image.response.results);
+          setPicture(image.response.results)
         }
         setCoord({
           ville: name,
           latitude: lat,
           longitude: long,
           checkWeather: true,
-        });
-        setFoundCity([]);
-        setCity("");
-        setName(name);
+        })
+        setFoundCity([])
+        setCity("")
+        setName(name)
       })
 
       .catch(() => {
-        console.log("Oups, something went wrong!");
-      });
-  };
+        console.log("Oups, something went wrong!")
+      })
+  }
 
   const results = foundCity?.map((cities) => {
     return (
@@ -142,8 +147,8 @@ export default function ResearchBar({
           {cities.admin1} ( lat: {cities.latitude} long: {cities.longitude} )
         </Styledbutton>
       </>
-    );
-  });
+    )
+  })
 
   return (
     <>
@@ -159,5 +164,5 @@ export default function ResearchBar({
         <StyledDivContainer>{results}</StyledDivContainer>
       </StyledForm>
     </>
-  );
+  )
 }

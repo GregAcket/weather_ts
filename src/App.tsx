@@ -1,34 +1,38 @@
-import { useState } from "react";
-import { City, Coordinates } from "./models/types";
-import { styled } from "styled-components";
-import { Basic } from "unsplash-js/dist/methods/photos/types";
+import { useState } from "react"
+import { City, Coordinates } from "./models/types"
+import { styled } from "styled-components"
+import { Basic } from "unsplash-js/dist/methods/photos/types"
 
-import Pictures from "./components/Pictures";
-import Weather from "./components/Weather";
-import ResearchBar from "./components/ResearchBar";
+import Pictures from "./components/Pictures"
+import Weather from "./components/Weather"
+import ResearchBar from "./components/ResearchBar"
+
+const StyledWeatherSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px 25px;
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+`
 
 const StyledUl = styled.ul`
   display: flex;
   justify-content: space-around;
   margin-top: 10px;
-`;
-
-const StyledWeatherSection = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+`
 
 export default function App() {
-  const [city, setCity] = useState<string>("");
-  const [foundCity, setFoundCity] = useState<City[]>([]);
-  const [picture, setPicture] = useState<Basic[]>([]);
+  const [city, setCity] = useState<string>("")
+  const [foundCity, setFoundCity] = useState<City[]>([])
+  const [picture, setPicture] = useState<Basic[]>([])
   const [coord, setCoord] = useState<Coordinates>({
     ville: "",
     latitude: 0,
     longitude: 0,
     checkWeather: false,
-  });
+  })
 
   return (
     <>
@@ -44,10 +48,12 @@ export default function App() {
         <StyledWeatherSection>
           {coord.checkWeather && <Weather coord={coord} />}
         </StyledWeatherSection>
-        <StyledUl>
+        {/*        <StyledUl>
           <Pictures image={picture} />
         </StyledUl>
+
+  */}
       </main>
     </>
-  );
+  )
 }

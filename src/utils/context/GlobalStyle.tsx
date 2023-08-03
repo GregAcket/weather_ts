@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { ThemeContext } from "./ThemeProvider";
-import { createGlobalStyle } from "styled-components";
-import { StyledProps } from "../../models/types";
+import { useContext } from "react"
+import { ThemeContext } from "./ThemeProvider"
+import { createGlobalStyle } from "styled-components"
+import { StyledProps } from "../../models/types"
 
 const StyledGlobalStyle = createGlobalStyle<StyledProps>`
 
@@ -20,6 +20,8 @@ body {
   flex-direction: column;
   margin: auto;
   max-width: 1440px;
+  font-size: 18px;
+  font-family: sans-serif;
 }
 
 h1,
@@ -33,10 +35,10 @@ button,
 ul {
   padding: 0px;
 }
-`;
+`
 
 export default function GlobalStyle() {
-  const { theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext)
 
-  return <StyledGlobalStyle $isDarkMode={theme === "dark"} />;
+  return <StyledGlobalStyle $isDarkMode={theme === "dark"} />
 }

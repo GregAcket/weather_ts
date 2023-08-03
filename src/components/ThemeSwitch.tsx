@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { styled } from "styled-components";
-import { ThemeContext } from "../utils/context/ThemeProvider";
-import { StyledProps } from "../models/types";
+import { useContext } from "react"
+import { styled } from "styled-components"
+import { ThemeContext } from "../utils/context/ThemeProvider"
+import { StyledProps } from "../models/types"
 
 const StyledInput = styled.input`
   height: 0;
@@ -11,7 +11,7 @@ const StyledInput = styled.input`
     left: calc(100% - 2px);
     transform: translateX(-100%);
   }
-`;
+`
 
 const StyledLabel = styled.label<StyledProps>`
   position: relative;
@@ -29,7 +29,7 @@ const StyledLabel = styled.label<StyledProps>`
       height:34px;
     }
   }
-`;
+`
 
 const Switch = styled.span<StyledProps>`
   display: flex;
@@ -48,10 +48,10 @@ const Switch = styled.span<StyledProps>`
     width: 30px;
     height: 30px;
   }
-`;
+`
 
 export default function SwitchComponent() {
-  const { toggleTheme, theme } = useContext(ThemeContext);
+  const { toggleTheme, theme } = useContext(ThemeContext)
   return (
     <>
       <StyledInput type="checkbox" id="switch" onClick={() => toggleTheme()} />
@@ -61,5 +61,5 @@ export default function SwitchComponent() {
         </Switch>
       </StyledLabel>
     </>
-  );
+  )
 }
