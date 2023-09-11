@@ -12,11 +12,14 @@ import {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent"
-import { Data } from "./Weather"
 import { styled } from "styled-components"
-import { ForecastWeather, ForecastWind, StyledProps } from "../models/types"
-import { useContext, useState } from "react"
-import { ThemeContext } from "../utils/context/ThemeProvider"
+import {
+  ForecastWeather,
+  ForecastWind,
+  StyledProps,
+  Data,
+} from "../utils/types"
+import { useState } from "react"
 
 type ForecastProps = {
   datasForcastForToday: Data[]
@@ -67,8 +70,7 @@ const StyledNavLi = styled.li<StyledProps>`
   cursor: pointer;
   &:hover {
     transition: all 500ms;
-    background: ${({ $isDarkMode }) => ($isDarkMode ? "white" : "black")};
-    color: ${({ $isDarkMode }) => ($isDarkMode ? "black" : "white")};
+    background: white;
   }
 `
 
@@ -96,15 +98,30 @@ const StyledUl = styled.ul`
 `
 
 const StyledLi = styled.li`
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 92px 1fr 80px;
   align-items: center;
   list-style: none;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 110px 1fr 90px;
+  }
 `
 
 const StyledDivLi = styled.div`
   display: flex;
+  justify-content: space-evenly;
   align-items: center;
+`
+const DivWind = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 3px;
+`
+
+const DivTemp = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const StyledDivCharts = styled.div`
@@ -137,8 +154,8 @@ const weathercodeToJsx = (
 }
 
 const windDirection = (datas: Data[], arr1: ForecastWind[]) => {
-  let mapped = datas.map((data) => {
-    let filtered = arr1.find(
+  const mapped = datas.map((data) => {
+    const filtered = arr1.find(
       (direction) =>
         data.winddirection !== undefined &&
         direction.min < data.winddirection &&
@@ -173,7 +190,6 @@ export default function Forecast({
   forecastWind,
 }: ForecastProps) {
   const [isActive, setIsActive] = useState("today")
-  const { theme } = useContext(ThemeContext)
 
   function handleChangeActiveTab() {
     isActive === "today" ? setIsActive("nextweek") : setIsActive("today")
@@ -182,7 +198,7 @@ export default function Forecast({
   ////////// Forecast for next week //////////
 
   function ForecastForNextWeek() {
-    let days = getDatesForToday.map((day) => {
+    const days = getDatesForToday.map((day) => {
       return day.getDay()
     })
 
@@ -196,25 +212,26 @@ export default function Forecast({
       "Samedi",
     ]
 
-    console.log(todaysDatas)
-
-    let emoteWeek = weathercodeToJsx(todaysDatas, forecast)
-    let emoteWindWeek = windDirection(todaysDatas, forecastWind)
+    const emoteWeek = weathercodeToJsx(todaysDatas, forecast)
+    const emoteWindWeek = windDirection(todaysDatas, forecastWind)
 
     const weekly = []
 
     for (let i = 0; i < week.length; i++) {
-      let semaine = (
+      const semaine = (
         <StyledLi key={i}>
-          {week[days[i]]} : {emoteWeek[i]?.weathercode}
+          {week[days[i]]} :
           <StyledDivLi>
-            {emoteWindWeek[i]?.winddirection}
-            {emoteWindWeek[i]?.value}
+            {emoteWeek[i]?.weathercode}
+            <DivWind>
+              {emoteWindWeek[i]?.winddirection}
+              {emoteWindWeek[i]?.value}
+            </DivWind>
           </StyledDivLi>
-          <div>
+          <DivTemp>
             <p>Max: {todaysDatas[i].TºC_max}</p>
             <p>Min: {todaysDatas[i].TºC_min}</p>{" "}
-          </div>
+          </DivTemp>
         </StyledLi>
       )
       weekly.push(semaine)
@@ -225,26 +242,27 @@ export default function Forecast({
   ////////// Forecast for Today //////////
 
   function ForecastForToday() {
-    let fourHours = twentyFourHourData.filter((four) => {
+    const fourHours = twentyFourHourData.filter((four) => {
       if (four.heure !== undefined && four.heure % 4 === 0) {
-        let hour = four.heure
+        const hour = four.heure
         return hour
       }
     })
 
-    let emoteHour = weathercodeToJsx(fourHours, forecast)
-    let emoteWindHour = windDirection(fourHours, forecastWind)
-
-    console.log(emoteWindHour)
+    const emoteHour = weathercodeToJsx(fourHours, forecast)
+    const emoteWindHour = windDirection(fourHours, forecastWind)
 
     const horaire = []
 
     for (let i = 0; i < emoteHour.length; i++) {
       const heure = (
         <StyledLi key={i}>
-          À {emoteHour[i]?.heure}h00 : {emoteHour[i]?.weathercode}{" "}
+          {emoteHour[i]?.heure}h00 :
           <StyledDivLi>
-            {emoteWindHour[i]?.winddirection} {emoteWindHour[i]?.value}{" "}
+            {emoteHour[i]?.weathercode}
+            <DivWind>
+              {emoteWindHour[i]?.winddirection} {emoteWindHour[i]?.value}{" "}
+            </DivWind>
           </StyledDivLi>
           {fourHours[i].TºC}ºC
         </StyledLi>
@@ -282,14 +300,12 @@ export default function Forecast({
           <StyledNavUl>
             <StyledNavLi
               $isActive={isActive === "today"}
-              $isDarkMode={theme === "dark"}
               onClick={handleChangeActiveTab}
             >
               Aujourd'hui
             </StyledNavLi>
             <StyledNavLi
               $isActive={isActive === "nextweek"}
-              $isDarkMode={theme === "dark"}
               onClick={handleChangeActiveTab}
             >
               Cette semaine
@@ -317,23 +333,24 @@ export default function Forecast({
                 margin={{ left: -25, right: 20 }}
               >
                 {isActive === "today" ? (
-                  <XAxis dataKey="heure" />
+                  <XAxis dataKey="heure" stroke="#000" />
                 ) : (
                   <XAxis
+                    stroke="#000"
                     dataKey="date"
                     ticks={formatedDatesForToday}
                     padding={{ left: 15 }}
                   />
                 )}
 
-                <YAxis />
+                <YAxis stroke="#000" />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend
                   verticalAlign="top"
                   align="right"
                   wrapperStyle={{ left: 10 }}
                 />
-                <Line type="monotone" dataKey="TºC" stroke="#0f0" dot={false} />
+                <Line type="monotone" dataKey="TºC" stroke="#ff0" dot={false} />
 
                 {isActive === "nextweek" && (
                   <>
@@ -348,7 +365,7 @@ export default function Forecast({
                       connectNulls
                       type="monotone"
                       dataKey="TºC_min"
-                      stroke="#007fff"
+                      stroke="#0f0"
                       dot={true}
                     />
                   </>

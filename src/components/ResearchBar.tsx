@@ -1,7 +1,10 @@
 import { ChangeEvent, MouseEvent, useState } from "react"
 import { styled } from "styled-components"
-import { ResearchBarProps } from "../models/types"
-import { createApi } from "unsplash-js"
+import { City, ResearchBarProps } from "../utils/types"
+
+type Datas = {
+  results: City[]
+}
 
 const StyledForm = styled.form`
   display: flex;
@@ -10,7 +13,7 @@ const StyledForm = styled.form`
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  margin: 50px 0px 20px;
 `
 
 const StyledInput = styled.input`
@@ -19,6 +22,7 @@ const StyledInput = styled.input`
   border: 1px solid black;
   height: 30px;
   width: 250px;
+  background: transparent;
 `
 
 const StyledDivContainer = styled.div`
@@ -36,6 +40,7 @@ const StyledDivContainer = styled.div`
 `
 
 const Styledbutton = styled.button`
+  font-size: 18px;
   margin-bottom: 5px;
   padding: 0px 3px;
   border: 1px solid black;
@@ -54,9 +59,10 @@ export default function ResearchBar({
   setCity,
   foundCity,
   setFoundCity,
-  setPicture,
   setCoord,
 }: ResearchBarProps) {
+  //STATE
+
   const [name, setName] = useState("...")
 
   function isoToEmoji(code: string): string {
@@ -67,33 +73,26 @@ export default function ResearchBar({
       .join("")
   }
 
-  const api = createApi({
-    accessKey: import.meta.env.VITE_UNSPLASH_KEY,
-  })
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCity(e.currentTarget.value)
 
-    fetch(
+    const url =
       "https://geocoding-api.open-meteo.com/v1/search?name=" +
-        city +
-        "&count=40&language=fr&format=json"
-    )
-      .then((resolve) => {
-        if (resolve.ok) {
-          return resolve.json()
-        }
-      })
+      city +
+      "&count=10&language=fr&format=json"
 
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url)
+        const data = (await response.json()) as Datas
         setFoundCity(data.results)
-      })
-
-      .catch((err) => {
+      } catch (error) {
+        console.log(error)
         alert(`Une  erreur s'est produite. Veuillez nous excuser`)
+      }
+    }
 
-        console.log(err)
-      })
+    void fetchData()
   }
 
   const handleSubmit = (
@@ -104,49 +103,30 @@ export default function ResearchBar({
   ) => {
     e.preventDefault()
 
-    api.search
-      .getPhotos({
-        query: name,
-        orientation: "landscape",
-        perPage: 3,
-      })
-
-      .then((image) => {
-        if (image.response !== undefined) {
-          setPicture(image.response.results)
-        }
-        setCoord({
-          ville: name,
-          latitude: lat,
-          longitude: long,
-          checkWeather: true,
-        })
-        setFoundCity([])
-        setCity("")
-        setName(name)
-      })
-
-      .catch(() => {
-        console.log("Oups, something went wrong!")
-      })
+    setCoord({
+      ville: name,
+      latitude: lat,
+      longitude: long,
+      checkWeather: true,
+    })
+    setFoundCity([])
+    setCity("")
+    setName(name)
   }
 
   const results = foundCity?.map((cities) => {
     return (
-      <>
-        <Styledbutton
-          key={cities.id}
-          onClick={(e) =>
-            handleSubmit(e, cities.name, cities.latitude, cities.longitude)
-          }
-        >
-          <div>
-            {isoToEmoji(cities.country_code)}
-            {cities.name}
-          </div>
-          {cities.admin1} ( lat: {cities.latitude} long: {cities.longitude} )
-        </Styledbutton>
-      </>
+      <Styledbutton
+        key={cities.id}
+        onClick={(e) =>
+          handleSubmit(e, cities.name, cities.latitude, cities.longitude)
+        }
+      >
+        <div>
+          {isoToEmoji(cities.country_code)} {cities.name}
+        </div>
+        {cities.admin1} ( lat: {cities.latitude} , long: {cities.longitude} )
+      </Styledbutton>
     )
   })
 

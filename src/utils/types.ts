@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react"
-import { Basic } from "unsplash-js/dist/methods/photos/types"
 
 export type Coordinates = {
   ville: string
@@ -19,7 +18,6 @@ export type City = {
 
 export type StyledProps = {
   $isActive?: boolean
-  $isDarkMode?: boolean
 }
 
 export type Weather = {
@@ -65,6 +63,18 @@ export type ResearchBarProps = {
   setCity: Dispatch<SetStateAction<string>>
   foundCity: City[]
   setFoundCity: Dispatch<SetStateAction<City[]>>
-  setPicture: Dispatch<SetStateAction<Basic[]>>
   setCoord: Dispatch<SetStateAction<Coordinates>>
+}
+
+export type Data = {
+  id?: number
+  heure?: number
+  date?: string
+  is_day?: number
+  weathercode?: number
+  TºC?: number
+  TºC_max?: number
+  TºC_min?: number
+  winddirection?: number
+  windspeed?: number
 }

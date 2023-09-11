@@ -4,7 +4,7 @@ import {
   ForecastWeather,
   ForecastWind,
   Weather,
-} from "../models/types"
+} from "../utils/types"
 
 type Currentweather = {
   weather: Weather
@@ -37,12 +37,12 @@ export default function Currentweather({
   forecast,
   forecastWind,
 }: Currentweather) {
-  let actualWeather = forecast.find(
+  const actualWeather = forecast.find(
     (actual) => actual.value === weather.current_weather.weathercode
   )
 
   const windDirection = (datas: Weather, arr1: ForecastWind[]) => {
-    let filtered = arr1.find(
+    const filtered = arr1.find(
       (direction) =>
         direction.min < datas.current_weather.winddirection &&
         direction.max > datas.current_weather.winddirection
@@ -54,8 +54,7 @@ export default function Currentweather({
     }
   }
 
-  let wind = windDirection(weather, forecastWind)
-  console.log(wind)
+  const wind = windDirection(weather, forecastWind)
 
   return (
     <>

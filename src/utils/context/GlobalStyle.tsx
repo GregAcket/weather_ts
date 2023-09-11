@@ -1,7 +1,5 @@
-import { useContext } from "react"
-import { ThemeContext } from "./ThemeProvider"
 import { createGlobalStyle } from "styled-components"
-import { StyledProps } from "../../models/types"
+import { StyledProps } from "../types"
 
 const StyledGlobalStyle = createGlobalStyle<StyledProps>`
 
@@ -10,9 +8,10 @@ const StyledGlobalStyle = createGlobalStyle<StyledProps>`
 }
 
 body {
-  background-color: ${({ $isDarkMode }) => ($isDarkMode ? "black" : "white")};
-  color: ${({ $isDarkMode }) => ($isDarkMode ? "white" : "black")};
+  min-width:100vw;
+  min-height:100vh;
   margin: 0;
+  background: radial-gradient(circle at top right, gold , #1e81b0 20%, #0b5186);
 }
 
 #root {
@@ -20,8 +19,12 @@ body {
   flex-direction: column;
   margin: auto;
   max-width: 1440px;
-  font-size: 18px;
+  font-size: 16px;
   font-family: sans-serif;
+
+  @media (min-width: 768px){
+    font-size:18px;
+  }
 }
 
 h1,
@@ -38,7 +41,5 @@ ul {
 `
 
 export default function GlobalStyle() {
-  const { theme } = useContext(ThemeContext)
-
-  return <StyledGlobalStyle $isDarkMode={theme === "dark"} />
+  return <StyledGlobalStyle />
 }
