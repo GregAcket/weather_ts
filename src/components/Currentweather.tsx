@@ -59,7 +59,11 @@ export default function Currentweather({
   return (
     <>
       <StyledAside>
-        <StyledP>Actuellement, à {coord.ville} :</StyledP>
+        {coord.ville ? (
+          <StyledP>Actuellement, à {coord.ville} :</StyledP>
+        ) : (
+          <StyledP>Actuellement, :</StyledP>
+        )}
         <StyledP>Il fait {weather?.current_weather?.temperature}ºC</StyledP>
         <StyledP>
           {actualWeather?.description} {actualWeather?.emote}

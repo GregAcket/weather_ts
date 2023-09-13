@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   ResponsiveContainer,
   LineChart,
@@ -279,7 +280,7 @@ export default function Forecast({
     if (active && payload !== undefined) {
       return (
         <>
-          {payload === null ? undefined : (
+          {payload && (
             <div>
               {isActive === "nextweek" && <p>{payload[0].payload.date}</p>}
               <p>{payload[0].payload.heure}h00</p>
@@ -295,7 +296,6 @@ export default function Forecast({
     <>
       <StyledSection>
         <p>Vos prévisions pour :</p>
-
         <StyledNav>
           <StyledNavUl>
             <StyledNavLi
@@ -312,7 +312,6 @@ export default function Forecast({
             </StyledNavLi>
           </StyledNavUl>
         </StyledNav>
-
         <StyledArticle>
           <StyledUl>
             {isActive === "today" ? (

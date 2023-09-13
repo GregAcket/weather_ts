@@ -1,6 +1,7 @@
 import { ChangeEvent, MouseEvent, useState } from "react"
 import { styled } from "styled-components"
 import { City, ResearchBarProps } from "../utils/types"
+import location from "../assets/location.svg"
 
 type Datas = {
   results: City[]
@@ -17,12 +18,12 @@ const StyledForm = styled.form`
 `
 
 const StyledInput = styled.input`
-  margin-top: 10px;
   border-radius: 3px;
   border: 1px solid black;
   height: 30px;
   width: 250px;
   background: transparent;
+  font-size: 18px;
 `
 
 const StyledDivContainer = styled.div`
@@ -54,6 +55,22 @@ const Styledbutton = styled.button`
   }
 `
 
+const Div = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+`
+
+const Img = styled.img`
+  cursor: pointer;
+`
+
+// const LocateButton = styled.button`
+//   background: transparent;
+//   border: none;
+//   cursor: pointer;
+// `
+
 export default function ResearchBar({
   city,
   setCity,
@@ -63,14 +80,16 @@ export default function ResearchBar({
 }: ResearchBarProps) {
   //STATE
 
-  const [name, setName] = useState("...")
+  const [name, setName] = useState(" à ...")
 
-  function isoToEmoji(code: string): string {
-    return code
-      .split("")
-      .map((letter) => (letter.charCodeAt(0) % 32) + 0x1f1e5)
-      .map((emojiCode) => String.fromCodePoint(emojiCode))
-      .join("")
+  function isoToEmoji(code: string) {
+    if (code !== undefined) {
+      return code
+        .split("")
+        .map((letter) => (letter.charCodeAt(0) % 32) + 0x1f1e5)
+        .map((emojiCode) => String.fromCodePoint(emojiCode))
+        .join("")
+    }
   }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +104,7 @@ export default function ResearchBar({
       try {
         const response = await fetch(url)
         const data = (await response.json()) as Datas
+        console.log(data.results)
         setFoundCity(data.results)
       } catch (error) {
         console.log(error)
@@ -102,7 +122,6 @@ export default function ResearchBar({
     long: number
   ) => {
     e.preventDefault()
-
     setCoord({
       ville: name,
       latitude: lat,
@@ -111,9 +130,25 @@ export default function ResearchBar({
     })
     setFoundCity([])
     setCity("")
-    setName(name)
+    setName("à" + " " + name)
   }
 
+  const locate = (e: MouseEvent) => {
+    e.preventDefault()
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      const latitude = position.coords.latitude
+      const longitude = position.coords.longitude
+
+      setCoord({
+        latitude: latitude,
+        longitude: longitude,
+        checkWeather: true,
+      })
+
+      setName(" près de vous ")
+    })
+  }
   const results = foundCity?.map((cities) => {
     return (
       <Styledbutton
@@ -133,14 +168,17 @@ export default function ResearchBar({
   return (
     <>
       <StyledForm>
-        <label htmlFor="city">Quel temps fait il à {name}</label>
-        <StyledInput
-          type="search"
-          name="city"
-          id="city"
-          value={city}
-          onChange={(e) => handleInputChange(e)}
-        />
+        <label htmlFor="city">Quel temps fait il {name}</label>
+        <Div>
+          <Img src={location} alt="location icon" onClick={(e) => locate(e)} />
+          <StyledInput
+            type="search"
+            name="city"
+            id="city"
+            value={city}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </Div>
         <StyledDivContainer>{results}</StyledDivContainer>
       </StyledForm>
     </>

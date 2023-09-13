@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react"
 
 export type Coordinates = {
-  ville: string
+  ville?: string
   latitude: number
   longitude: number
   checkWeather: boolean

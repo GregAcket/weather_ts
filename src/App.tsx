@@ -9,6 +9,7 @@ const StyledWeatherSection = styled.section`
   flex-direction: column;
   align-items: center;
   padding: 0px 25px;
+  margin-bottom: 20px;
   @media (min-width: 768px) {
     flex-direction: row;
   }
